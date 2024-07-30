@@ -10,6 +10,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,6 +30,45 @@ public class NightVisionHead implements Listener {
 
     public NightVisionHead(MinersUA plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) return;
+
+        Player player = (Player) event.getWhoClicked();
+        ItemStack currentHelmet = player.getInventory().getHelmet();
+        ItemStack clickedItem = event.getCurrentItem();
+
+        // Перевіряємо, чи гравець намагається зняти окуляри нічного бачення
+        if (event.getSlotType() == InventoryType.SlotType.ARMOR && event.getSlot() == 39 // Slot 39 - це шолом
+                && clickedItem != null && clickedItem.getType() == Material.CARVED_PUMPKIN && clickedItem.getItemMeta().getCustomModelData() == 100
+                && player.hasMetadata("night_vision_glasses_toggling")) {
+
+            // Якщо окуляри в процесі перемикання, скасовуємо подію
+            event.setCancelled(true);
+        } else if (event.getSlotType() == InventoryType.SlotType.ARMOR && event.getSlot() == 39 // Slot 39 - це шолом
+                && currentHelmet != null && currentHelmet.getType() == Material.CARVED_PUMPKIN && currentHelmet.getItemMeta().getCustomModelData() == 100) {
+
+            // Якщо окуляри були зняті або змінені на інші, вимикаємо нічний режим
+            if (player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                player.sendMessage("§cОкуляри нічного бачення вимкнено");
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDER_EYE_DEATH, 0.6f, 0.8f);
+
+            }
+
+            // Оновлення опису окулярів
+            if (clickedItem != null && clickedItem.getType() == Material.CARVED_PUMPKIN && clickedItem.getItemMeta().getCustomModelData() == 100) {
+                ItemMeta meta = clickedItem.getItemMeta();
+                List<String> lore = new ArrayList<>();
+                lore.add(" ");
+                lore.add("§7Коли на голові:");
+                lore.add("§9-20% урону");
+                meta.setLore(lore);
+                clickedItem.setItemMeta(meta);
+            }
+        }
     }
 
     @EventHandler
@@ -79,7 +121,7 @@ public class NightVisionHead implements Listener {
 
                     // Додавання опису
                     List<String> lore = new ArrayList<>();
-                    lore.add("§7Нічний бачення");
+                    lore.add("§7Нічне бачення");
                     lore.add(" ");
                     lore.add("§7Коли надягнуто:");
                     lore.add("§9-20% урону");
@@ -111,5 +153,7 @@ public class NightVisionHead implements Listener {
                     new TextComponent("§cОтримано урону: " + String.format("%.1f", damage)));
         }
     }
+
+
 
 }
