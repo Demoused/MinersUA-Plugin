@@ -1,5 +1,5 @@
 name: MinersUA
-version: '1.0.1'
+version: '1.0.2'
 main: org.topua.mc.minersUA.MinersUA
 api-version: '1.19'
 authors: [ Demoused, JeuHa ]

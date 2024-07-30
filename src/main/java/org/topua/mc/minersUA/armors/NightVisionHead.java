@@ -88,6 +88,7 @@ public class NightVisionHead implements Listener {
             player.setMetadata("night_vision_glasses_toggling", new FixedMetadataValue(this.plugin, true)); // Встановлюємо стан "перемикання"
 
             if (player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 60, 1, true, false));
                 // Відтворення звуків вимкнення протягом 2 секунд, оновлюючи позицію
                 BukkitTask task = Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
                     player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 10.0f, 0.7f); // Знижений тон
@@ -109,6 +110,7 @@ public class NightVisionHead implements Listener {
                     player.removeMetadata("night_vision_glasses_toggling", this.plugin); // Знімаємо стан "перемикання"
                 }, 40L); // 40 ticks = 2 секунда затримки
             } else {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 60, 1, true, false));
                 // Відтворення звуків вмикання протягом 2 секунд, оновлюючи позицію
                 BukkitTask task = Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
                     player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_GENERIC, 10.0f, 0.7f); // Знижений тон
