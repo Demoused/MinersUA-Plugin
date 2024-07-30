@@ -2,5 +2,5 @@ name: MinersUA
 version: '1.0.0'
 main: org.topua.mc.minersUA.MinersUA
 api-version: '1.19'
-authors: [ Demoused, Dim_Dim1ch ]
-description: Офійний плагин, створений для проекту TopUA
+authors: [ Demoused, JeuHa ]
+description: Плагин, офіційно створений для проету MinersUA
