@@ -1,6 +1,11 @@
 name: MinersUA
-version: '1.0.0'
+version: '1.0.1'
 main: org.topua.mc.minersUA.MinersUA
 api-version: '1.19'
 authors: [ Demoused, JeuHa ]
 description: Плагин, офіційно створений для проету MinersUA
+
+commands:
+  nightvision:
+    description: Видати окуляри нічного бачення.
+    usage: /nightvision

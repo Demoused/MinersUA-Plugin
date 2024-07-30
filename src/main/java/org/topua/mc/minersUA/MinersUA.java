@@ -1,8 +1,11 @@
 package org.topua.mc.minersUA;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.topua.mc.minersUA.armors.NightVisionCommand;
+import org.topua.mc.minersUA.armors.NightVisionHead;
 
 public final class MinersUA extends JavaPlugin {
     private static MinersUA instance;
@@ -12,6 +15,11 @@ public final class MinersUA extends JavaPlugin {
     @Override
     public void onEnable() {
         WelcomeLogo(true);
+
+        Server server = Bukkit.getServer();
+        server.getPluginManager().registerEvents(new NightVisionHead(this),this);
+
+        getCommand("nightvision").setExecutor(new NightVisionCommand());
     }
 
     @Override
@@ -33,5 +41,9 @@ public final class MinersUA extends JavaPlugin {
         console.sendMessage(colorCode + "/_/  /_/_/_/ /_/\\___/_/  /____/\\____/_/  |_|");
         console.sendMessage(colorCode + "       " + plugin + (start ? " v" + version : "") + statusMessage);
         console.sendMessage(" ");
+    }
+
+    public static MinersUA getInstance() {
+        return instance;
     }
 }
